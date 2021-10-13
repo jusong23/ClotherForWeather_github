@@ -63,6 +63,7 @@ export default function App() {
     </View>
   );
 }
+// ㄹㅇ 커밋 됨?
 // 삼항조건연산자로 로딩중일때와 실행 됐을때 페이지 제작
 const styles = StyleSheet.create({
   container: {
