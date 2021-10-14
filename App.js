@@ -13,28 +13,40 @@ const weatherOptions = {
     gradient: ["#373B44", "#4286f4"],
     title: "Thunderstorm in the house",
     subtitle: "Actually, outside of the house",
+    nameOfSong: "비 오는 날 듣기 좋은 노래",
+    youtubeLink:
+      "https://www.youtube.com/results?search_query=%EB%B9%84+%EC%98%A4%EB%8A%94+%EB%82%A0+%EB%93%A3%EA%B8%B0+%EC%A2%8B%EC%9D%80+%EB%85%B8%EB%9E%98",
   },
   Drizzle: {
     iconName: "weather-hail",
     gradient: ["#89F7FE", "#66A6FF"],
     title: "Drizzle",
     subtitle: "Is like rain, but gay 🏳️‍🌈",
+    nameOfSong: "",
+    youtubeLink: "",
   },
   Rain: {
     iconName: "weather-rainy",
     gradient: ["#00C6FB", "#005BEA"],
     title: "Raining like a MF",
     subtitle: "For more info look outside",
+    nameOfSong: "비 오는 날 듣기 좋은 노래",
+    youtubeLink:
+      "https://www.youtube.com/results?search_query=%EB%B9%84+%EC%98%A4%EB%8A%94+%EB%82%A0+%EB%93%A3%EA%B8%B0+%EC%A2%8B%EC%9D%80+%EB%85%B8%EB%9E%98",
   },
   Snow: {
     iconName: "weather-snowy",
     gradient: ["#7DE2FC", "#B9B6E5"],
     title: "Cold as balls",
     subtitle: "Do you want to build a snowman? Fuck no.",
+    nameOfSong: "눈 오는 날 듣기 좋은 노래",
+    youtubeLink: "",
   },
   Atmosphere: {
     iconName: "weather-hail",
     gradient: ["#89F7FE", "#66A6FF"],
+    nameOfSong: "",
+    youtubeLink: "",
   },
   Clear: {
     iconName: "weather-sunny",
@@ -50,24 +62,33 @@ const weatherOptions = {
     gradient: ["#D7D2CC", "#304352"],
     title: "Clouds",
     subtitle: "I know, fucking boring",
+    nameOfSong: "흐린 날 듣기 좋은 노래",
+    youtubeLink:
+      "https://www.youtube.com/results?search_query=%ED%9D%90%EB%A6%B0+%EB%82%A0+%EB%93%A3%EA%B8%B0+%EC%A2%8B%EC%9D%80+%EB%85%B8%EB%9E%98",
   },
   Mist: {
     iconName: "weather-hail",
     gradient: ["#4DA0B0", "#D39D38"],
     title: "Mist!",
     subtitle: "It's like you have no glasses on.",
+    nameOfSong: "",
+    youtubeLink: "",
   },
   Dust: {
     iconName: "weather-hail",
     gradient: ["#4DA0B0", "#D39D38"],
     title: "Dusty",
     subtitle: "Thanks a lot China 🖕🏻",
+    nameOfSong: "",
+    youtubeLink: "",
   },
   Haze: {
     iconName: "weather-hail",
     gradient: ["#4DA0B0", "#D39D38"],
     title: "Haze",
     subtitle: "Just don't go outside.",
+    nameOfSong: "",
+    youtubeLink: "",
   },
 };
 
@@ -99,7 +120,8 @@ export default function App() {
     );
     const json = await response.json();
     setDays(json.daily);
-    console.log(location[0].country);
+
+    console.log(weatherOptions[days[0].weather[0].main].gradient[0]);
   };
 
   useEffect(() => {
@@ -108,10 +130,8 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.city}>
-        <Text style={styles.cityName}>{city}</Text>
-      </View>
-      <View style={styles.country}>
+      <View style={styles.localInfo}>
+        <Text style={styles.cityName}>{city}, </Text>
         <Text style={styles.countryName}>{country}</Text>
       </View>
       <View style={styles.date}>
@@ -152,16 +172,27 @@ export default function App() {
     </View>
   );
 }
-// ㄹㅇ 커밋 됨?
-// 삼항조건연산자로 로딩중일때와 실행 됐을때 페이지 제작
+
 const styles = StyleSheet.create({
-  container: {
+  gradientContainer: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
-  date: { flexDirection: "row", backgroundColor: "tomato" },
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  localInfo: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+  },
+  date: {
+    flexDirection: "row",
+    backgroundColor: "tomato",
+    justifyContent: "flex-start",
+  },
   songOfToday: {
     flexDirection: "row",
   },
