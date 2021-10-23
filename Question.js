@@ -13,6 +13,7 @@ import {
 import * as Location from "expo-location";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+
 import { Fontisto } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -162,16 +163,6 @@ const icons = {
   Thunderstorm: "lightning",
 };
 
-const clothesOptions = {
-  part1: { description: "민소매, 반팔, 반바지, 원피스" },
-  part2: { description: "반팔, 얇은셔츠, 반바지, 면바지" },
-  part3: { description: "얇은 가디건, 긴팔, 면바지, 청바지" },
-  part4: { description: "얇은 니트, 맨투맨, 가디건, 청바지, 면바지" },
-  part5: { description: "자켓, 가디건, 청바지, 스타킹, 면바지" },
-  part6: { description: "코트, 가죽자켓, 히트텍, 레깅스" },
-  part7: { description: "패딩, 두꺼운 코트, 목도리, 기모제품" },
-};
-
 export default function App() {
   const [city, setCity] = useState("Loading...");
   const [days, setDays] = useState([]);
@@ -203,13 +194,12 @@ export default function App() {
       const responseOfDaily = await fetch(
         `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${API_KEY}&units=metric`
       );
-
       const json = await responseOfDaily.json();
       setDays(json.daily);
       setHours(json.hourly);
       setCurrents(json.current);
       console.log("it`s working");
-      console.log(hours[1].weather[0].main);
+      console.log(currents.weather.length);
     } catch (error) {
       Alert.alert("Can't find you.", "So sad");
     }
@@ -220,102 +210,7 @@ export default function App() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.topContainer}>
-        <View style={styles.localInfo}>
-          <Ionicons name="location-outline" size={24} color="black" />
-          <Text style={styles.cityName}>{city}, </Text>
-          <Text style={styles.countryName}>{country}</Text>
-        </View>
-
-        {hours.length === 0 ? (
-          <View style={{ ...styles.day, alignItems: "center" }}>
-            <ActivityIndicator
-              color="white"
-              style={{ marginTop: 10 }}
-              size="large"
-            />
-          </View>
-        ) : (
-          <View style={styles.tempAndNameAndDcp}>
-            <View style={styles.weatherOfToday}>
-              <Fontisto
-                name={icons[hours[1].weather[0].main]}
-                size={80}
-                color="white"
-              />
-              <View style={styles.tempInfo}>
-                <View style={styles.twoTemp}>
-                  <Text style={styles.temp__now}>
-                    {parseFloat(hours[1].feels_like).toFixed(1)} /
-                  </Text>
-                  <Text style={styles.temp__min}>
-                    {parseFloat(days[0].temp.min).toFixed(1)}℃
-                  </Text>
-                </View>
-                <Text style={styles.temp__main}>
-                  {weatherOptions[hours[1].weather[0].main].title}
-                </Text>
-              </View>
-            </View>
-
-            <View style={styles.ClothesOfToday}>
-              <Image
-                style={styles.clothes}
-                source={{
-                  uri: "https://lounge-b.com/web/product/big/202011/b4d571ffb72a87c8e66ac56ac994c346.jpg",
-                }}
-              />
-              <Text style={styles.exampleOfClothes}>
-                {clothesOptions.part6.description}
-              </Text>
-            </View>
-            <View style={styles.songOfToday}>
-              <Text style={styles.madedText}>준비하면서 </Text>
-              <Text
-                style={{ ...styles.madedText, color: "blue" }}
-                onPress={() =>
-                  Linking.openURL(
-                    weatherOptions[days[0].weather[0].main].youtubeLink
-                  )
-                }
-              >
-                "{weatherOptions[days[0].weather[0].main].nameOfSong}"
-              </Text>
-              <Text style={styles.madedText}> 들으러 가기</Text>
-            </View>
-          </View>
-        )}
-      </View>
-      <View style={styles.bottomContainer}>
-        <View style={styles.todayBar}>
-          <Text style={{ fontSize: 25, fontWeight: "600" }}>Today</Text>
-          <AntDesign name="doubleright" size={24} color="black" />
-        </View>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={"false"}
-          pagingEnabled
-          contentStyles={styles.scrollView}
-        >
-          {hours.slice(1, 15).map((hour, index) => (
-            <View key={index} style={styles.infoOfTime}>
-              <Text style={styles.infoOfTime__time}>
-                {changeHours(giveMeHours(hour.dt * 1000 - date.getTime()))}
-              </Text>
-              <Fontisto
-                name={icons[hour.weather[0].main]}
-                size={30}
-                color="white"
-              />
-              <Text style={styles.infoOfTime__temp}>
-                {parseFloat(hour.temp).toFixed(1)}℃
-              </Text>
-            </View>
-          ))}
-        </ScrollView>
-      </View>
-    </View>
+  
   );
 }
 
@@ -327,13 +222,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   songOfToday: {
-    flex: 0.7,
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
   },
   topContainer: {
-    flex: 4,
+    flex: 3,
     backgroundColor: "#46e2e2",
     borderBottomStartRadius: 16,
     borderBottomEndRadius: 16,
@@ -375,7 +268,6 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   localInfo: {
-    flex: 1,
     flexDirection: "row",
     justifyContent: "center",
     marginTop: 32,
@@ -402,26 +294,6 @@ const styles = StyleSheet.create({
     marginLeft: 7,
   },
   ClothesOfToday: {
-    flex: 3,
     backgroundColor: "#8a6dff",
-    flexDirection: "column",
-    alignItems: "center",
-    borderBottomWidth: 2,
-    borderRadius: 5,
-    borderColor: "white",
-    marginRight: 17,
-    marginLeft: 17,
-  },
-  exampleOfClothes: {
-    marginTop: 16,
-    marginBottom: 16,
-    borderEndColor: "black",
-  },
-  tempAndNameAndDcp: {
-    flex: 11,
-  },
-  madedText: {
-    fontWeight: "500",
-    fontSize: 16,
   },
 });
