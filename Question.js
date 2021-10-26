@@ -1,299 +1,315 @@
-import React, { useEffect, useState } from "react";
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  View,
-  Linking,
-  StatusBar,
-  ActivityIndicator,
-  ScrollView,
-  Image,
-} from "react-native";
-import * as Location from "expo-location";
-import { AntDesign } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-
-import { Fontisto } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-
-const API_KEY = "5448715390df41aed509eef3faa3053b";
-const date = new Date();
-const WEEKDAY = ["일", "월", "화", "수", "목", "금", "토"];
-
-function giveMeHours(duration) {
-  var milliseconds = parseInt((duration % 1000) / 100),
-    seconds = Math.floor((duration / 1000) % 60),
-    minutes = Math.floor((duration / (1000 * 60)) % 60),
-    hours = date.getHours() + Math.floor((duration / (1000 * 60 * 60)) % 24);
-
-  return hours;
-}
-
-function timeConversion(millisec) {
-  var seconds = (millisec / 1000).toFixed(1);
-
-  var minutes = (millisec / (1000 * 60)).toFixed(1);
-
-  var hours = (millisec / (1000 * 60 * 60)).toFixed(1);
-
-  var days = (millisec / (1000 * 60 * 60 * 24)).toFixed(1);
-
-  if (seconds < 60) {
-    return seconds + " Sec";
-  } else if (minutes < 60) {
-    return minutes + " Min";
-  } else if (hours < 24) {
-    return hours + " Hrs";
-  } else {
-    return days + " Days";
-  }
-}
-
-function changeHours(time) {
-  if (time >= 0 && time < 13) {
-    return "오전" + time + "시";
-  } else if (time >= 13 && time < 25) {
-    return "오후" + (time - 12) + "시";
-  } else if (time >= 25 && time < 37) {
-    return "오전" + (time - 24) + "시";
-  } else if (time >= 37 && time < 49) {
-    return "오후" + (time - 36) + "시";
-  }
-}
-
-const weatherOptions = {
-  Thunderstorm: {
-    iconName: "weather-lightning",
-    gradient: ["#373B44", "#4286f4"],
-    title: "천둥번개",
-    subtitle: "Actually, outside of the house",
-    nameOfSong: "비 오는 날 듣기 좋은 노래",
-    youtubeLink:
-      "https://www.youtube.com/results?search_query=%EB%B9%84+%EC%98%A4%EB%8A%94+%EB%82%A0+%EB%93%A3%EA%B8%B0+%EC%A2%8B%EC%9D%80+%EB%85%B8%EB%9E%98",
+Array [
+  Object {
+    "clouds": 24,
+    "dew_point": 6.1,
+    "dt": 1635217200,
+    "feels_like": Object {
+      "day": 11.49,
+      "eve": 14.38,
+      "morn": 9.68,
+      "night": 13.04,
+    },
+    "humidity": 65,
+    "moon_phase": 0.67,
+    "moonrise": 1635250560,
+    "moonset": 1635216780,
+    "pop": 0,
+    "pressure": 1023,
+    "sunrise": 1635198587,
+    "sunset": 1635237642,
+    "temp": Object {
+      "day": 12.49,
+      "eve": 15.35,
+      "max": 17.62,
+      "min": 9.68,
+      "morn": 9.68,
+      "night": 13.8,
+    },
+    "uvi": 3.2,
+    "weather": Array [
+      Object {
+        "description": "few clouds",
+        "icon": "02d",
+        "id": 801,
+        "main": "Clouds",
+      },
+    ],
+    "wind_deg": 284,
+    "wind_gust": 3.8,
+    "wind_speed": 2.94,
   },
-  Drizzle: {
-    iconName: "weather-hail",
-    gradient: ["#89F7FE", "#66A6FF"],
-    title: "이슬비",
-    subtitle: "Is like rain, but gay 🏳️‍🌈",
-    nameOfSong: "비 오는 날 듣기 좋은 노래",
-    youtubeLink:
-      "https://www.youtube.com/results?search_query=%EB%B9%84+%EC%98%A4%EB%8A%94+%EB%82%A0+%EB%93%A3%EA%B8%B0+%EC%A2%8B%EC%9D%80+%EB%85%B8%EB%9E%98",
+  Object {
+    "clouds": 0,
+    "dew_point": 2.06,
+    "dt": 1635303600,
+    "feels_like": Object {
+      "day": 15.47,
+      "eve": 12.92,
+      "morn": 10.94,
+      "night": 9.91,
+    },
+    "humidity": 39,
+    "moon_phase": 0.7,
+    "moonrise": 1635340140,
+    "moonset": 1635306240,
+    "pop": 0.71,
+    "pressure": 1019,
+    "rain": 1.09,
+    "sunrise": 1635285048,
+    "sunset": 1635323970,
+    "temp": Object {
+      "day": 16.72,
+      "eve": 14.45,
+      "max": 18.08,
+      "min": 11.16,
+      "morn": 11.49,
+      "night": 11.34,
+    },
+    "uvi": 3.34,
+    "weather": Array [
+      Object {
+        "description": "light rain",
+        "icon": "10d",
+        "id": 500,
+        "main": "Rain",
+      },
+    ],
+    "wind_deg": 309,
+    "wind_gust": 5.85,
+    "wind_speed": 4.18,
   },
-  Rain: {
-    iconName: "weather-rainy",
-    gradient: ["#00C6FB", "#005BEA"],
-    title: "비가 촉촉",
-    subtitle: "For more info look outside",
-    nameOfSong: "비 오는 날 듣기 좋은 노래",
-    youtubeLink:
-      "https://www.youtube.com/results?search_query=%EB%B9%84+%EC%98%A4%EB%8A%94+%EB%82%A0+%EB%93%A3%EA%B8%B0+%EC%A2%8B%EC%9D%80+%EB%85%B8%EB%9E%98",
+  Object {
+    "clouds": 0,
+    "dew_point": -0.5,
+    "dt": 1635390000,
+    "feels_like": Object {
+      "day": 15.25,
+      "eve": 13.98,
+      "morn": 9.21,
+      "night": 11.17,
+    },
+    "humidity": 32,
+    "moon_phase": 0.73,
+    "moonrise": 1635430020,
+    "moonset": 1635395400,
+    "pop": 0,
+    "pressure": 1023,
+    "sunrise": 1635371510,
+    "sunset": 1635410299,
+    "temp": Object {
+      "day": 16.69,
+      "eve": 15.37,
+      "max": 18.39,
+      "min": 8.94,
+      "morn": 9.21,
+      "night": 12.53,
+    },
+    "uvi": 3.23,
+    "weather": Array [
+      Object {
+        "description": "clear sky",
+        "icon": "01d",
+        "id": 800,
+        "main": "Clear",
+      },
+    ],
+    "wind_deg": 85,
+    "wind_gust": 3.09,
+    "wind_speed": 1.49,
   },
-  Snow: {
-    iconName: "weather-snowy",
-    gradient: ["#7DE2FC", "#B9B6E5"],
-    title: "눈이 송송",
-    subtitle: "Do you want to build a snowman? Fuck no.",
-    nameOfSong: "눈 오는 날 듣기 좋은 노래",
-    youtubeLink:
-      "https://www.youtube.com/results?search_query=%EB%88%88+%EC%98%A4%EB%8A%94+%EB%82%A0+%EB%93%A3%EA%B8%B0+%EC%A2%8B%EC%9D%80+%EB%85%B8%EB%9E%98",
+  Object {
+    "clouds": 100,
+    "dew_point": 3.94,
+    "dt": 1635476400,
+    "feels_like": Object {
+      "day": 15.82,
+      "eve": 14.33,
+      "morn": 9.18,
+      "night": 12.69,
+    },
+    "humidity": 43,
+    "moon_phase": 0.75,
+    "moonrise": 0,
+    "moonset": 1635484200,
+    "pop": 0,
+    "pressure": 1026,
+    "sunrise": 1635457971,
+    "sunset": 1635496630,
+    "temp": Object {
+      "day": 16.95,
+      "eve": 15.4,
+      "max": 18.3,
+      "min": 10.29,
+      "morn": 10.29,
+      "night": 13.77,
+    },
+    "uvi": 3.18,
+    "weather": Array [
+      Object {
+        "description": "overcast clouds",
+        "icon": "04d",
+        "id": 804,
+        "main": "Clouds",
+      },
+    ],
+    "wind_deg": 114,
+    "wind_gust": 3.16,
+    "wind_speed": 2.15,
   },
-  Atmosphere: {
-    iconName: "weather-hail",
-    gradient: ["#89F7FE", "#66A6FF"],
-    nameOfSong: "비 오는 날 듣기 좋은 노래",
-    youtubeLink:
-      "https://www.youtube.com/results?search_query=%EB%B9%84+%EC%98%A4%EB%8A%94+%EB%82%A0+%EB%93%A3%EA%B8%B0+%EC%A2%8B%EC%9D%80+%EB%85%B8%EB%9E%98",
+  Object {
+    "clouds": 100,
+    "dew_point": 6.23,
+    "dt": 1635562800,
+    "feels_like": Object {
+      "day": 14.66,
+      "eve": 13.92,
+      "morn": 10.81,
+      "night": 13.01,
+    },
+    "humidity": 55,
+    "moon_phase": 0.79,
+    "moonrise": 1635520140,
+    "moonset": 1635572700,
+    "pop": 0,
+    "pressure": 1025,
+    "sunrise": 1635544433,
+    "sunset": 1635582962,
+    "temp": Object {
+      "day": 15.61,
+      "eve": 14.84,
+      "max": 16.77,
+      "min": 11.87,
+      "morn": 11.87,
+      "night": 13.87,
+    },
+    "uvi": 1.96,
+    "weather": Array [
+      Object {
+        "description": "overcast clouds",
+        "icon": "04d",
+        "id": 804,
+        "main": "Clouds",
+      },
+    ],
+    "wind_deg": 94,
+    "wind_gust": 1.6,
+    "wind_speed": 1.35,
   },
-  Clear: {
-    iconName: "weather-sunny",
-    gradient: ["#FF7300", "#FEF253"],
-    title: "맑고 푸른 하늘이에요(개발자 마음처럼)",
-    subtitle: "Go get your ass burnt",
-    nameOfSong: "날씨 좋은 날 듣기 좋은 노래",
-    youtubeLink:
-      "https://www.youtube.com/results?search_query=%EB%82%A0%EC%94%A8+%EC%A2%8B%EC%9D%80%EB%82%A0+%EB%93%A3%EA%B8%B0+%EC%A2%8B%EC%9D%80+%EB%85%B8%EB%9E%98",
+  Object {
+    "clouds": 0,
+    "dew_point": 4.83,
+    "dt": 1635649200,
+    "feels_like": Object {
+      "day": 16.27,
+      "eve": 14.44,
+      "morn": 9.95,
+      "night": 12.89,
+    },
+    "humidity": 45,
+    "moon_phase": 0.82,
+    "moonrise": 1635610440,
+    "moonset": 1635661020,
+    "pop": 0,
+    "pressure": 1024,
+    "sunrise": 1635630896,
+    "sunset": 1635669295,
+    "temp": Object {
+      "day": 17.31,
+      "eve": 15.6,
+      "max": 18.52,
+      "min": 10.85,
+      "morn": 10.85,
+      "night": 14.02,
+    },
+    "uvi": 2,
+    "weather": Array [
+      Object {
+        "description": "clear sky",
+        "icon": "01d",
+        "id": 800,
+        "main": "Clear",
+      },
+    ],
+    "wind_deg": 326,
+    "wind_gust": 3.04,
+    "wind_speed": 2.44,
   },
-  Clouds: {
-    iconName: "weather-cloudy",
-    gradient: ["#D7D2CC", "#304352"],
-    title: "꾸릿꾸릿 흐릿흐릿",
-    subtitle: "I know, fucking boring",
-    nameOfSong: "흐린 날 듣기 좋은 노래",
-    youtubeLink:
-      "https://www.youtube.com/results?search_query=%ED%9D%90%EB%A6%B0+%EB%82%A0+%EB%93%A3%EA%B8%B0+%EC%A2%8B%EC%9D%80+%EB%85%B8%EB%9E%98",
+  Object {
+    "clouds": 27,
+    "dew_point": 5.91,
+    "dt": 1635735600,
+    "feels_like": Object {
+      "day": 17.02,
+      "eve": 14.78,
+      "morn": 10.42,
+      "night": 13.14,
+    },
+    "humidity": 47,
+    "moon_phase": 0.86,
+    "moonrise": 1635700800,
+    "moonset": 1635749220,
+    "pop": 0,
+    "pressure": 1023,
+    "sunrise": 1635717358,
+    "sunset": 1635755630,
+    "temp": Object {
+      "day": 17.94,
+      "eve": 15.91,
+      "max": 18.71,
+      "min": 11.42,
+      "morn": 11.42,
+      "night": 14.15,
+    },
+    "uvi": 2,
+    "weather": Array [
+      Object {
+        "description": "scattered clouds",
+        "icon": "03d",
+        "id": 802,
+        "main": "Clouds",
+      },
+    ],
+    "wind_deg": 286,
+    "wind_gust": 2.68,
+    "wind_speed": 1.93,
   },
-  Mist: {
-    iconName: "weather-hail",
-    gradient: ["#4DA0B0", "#D39D38"],
-    title: "꾸릿꾸릿 흐릿흐릿",
-    subtitle: "It's like you have no glasses on.",
-    nameOfSong: "비 오는 날 듣기 좋은 노래",
-    youtubeLink:
-      "https://www.youtube.com/results?search_query=%EB%B9%84+%EC%98%A4%EB%8A%94+%EB%82%A0+%EB%93%A3%EA%B8%B0+%EC%A2%8B%EC%9D%80+%EB%85%B8%EB%9E%98",
+  Object {
+    "clouds": 100,
+    "dew_point": 5.66,
+    "dt": 1635822000,
+    "feels_like": Object {
+      "day": 15.13,
+      "eve": 13.68,
+      "morn": 10.02,
+      "night": 12.25,
+    },
+    "humidity": 51,
+    "moon_phase": 0.9,
+    "moonrise": 1635791280,
+    "moonset": 1635837240,
+    "pop": 0,
+    "pressure": 1023,
+    "sunrise": 1635803821,
+    "sunset": 1635841966,
+    "temp": Object {
+      "day": 16.13,
+      "eve": 14.79,
+      "max": 17.23,
+      "min": 11.03,
+      "morn": 11.03,
+      "night": 13.27,
+    },
+    "uvi": 2,
+    "weather": Array [
+      Object {
+        "description": "overcast clouds",
+        "icon": "04d",
+        "id": 804,
+        "main": "Clouds",
+      },
+    ],
+    "wind_deg": 78,
+    "wind_gust": 1.4,
+    "wind_speed": 1.14,
   },
-  Dust: {
-    iconName: "weather-hail",
-    gradient: ["#4DA0B0", "#D39D38"],
-    title: "황사 ! 두꺼운 마스크 필수",
-    subtitle: "Thanks a lot China 🖕🏻",
-    nameOfSong: "흐린 날 듣기 좋은 노래",
-    youtubeLink:
-      "https://www.youtube.com/results?search_query=%EA%BF%89%EA%BF%89%ED%95%9C+%EB%82%A0+%EB%93%A3%EA%B8%B0+%EC%A2%8B%EC%9D%80+%EB%85%B8%EB%9E%98",
-  },
-  Haze: {
-    iconName: "weather-hail",
-    gradient: ["#4DA0B0", "#D39D38"],
-    title: "꾸릿꾸릿 흐릿흐릿",
-    subtitle: "Just don't go outside.",
-    nameOfSong: "흐린 날 듣기 좋은 노래",
-    youtubeLink:
-      "https://www.youtube.com/results?search_query=%EB%B9%84+%EC%98%A4%EB%8A%94+%EB%82%A0+%EB%93%A3%EA%B8%B0+%EC%A2%8B%EC%9D%80+%EB%85%B8%EB%9E%98",
-  },
-};
-
-const icons = {
-  Clouds: "cloudy",
-  Clear: "day-sunny",
-  Atmosphere: "cloudy-gusts",
-  Snow: "snow",
-  Rain: "rains",
-  Drizzle: "rain",
-  Thunderstorm: "lightning",
-};
-
-export default function App() {
-  const [city, setCity] = useState("Loading...");
-  const [days, setDays] = useState([]);
-  const [currents, setCurrents] = useState([]);
-  const [hours, setHours] = useState([]);
-  const now = date.getTime();
-  const [country, setCountry] = useState([]);
-  const [ok, setOk] = useState(true);
-  const getWeather = async () => {
-    try {
-      const { granted } = await Location.requestForegroundPermissionsAsync();
-      if (!granted) {
-        setOk(false);
-      }
-      const {
-        coords: { latitude, longitude },
-      } = await Location.getCurrentPositionAsync({ accuracy: 5 });
-      const location = await Location.reverseGeocodeAsync(
-        {
-          latitude,
-          longitude,
-        },
-        { useGoogleMaps: false } // Option
-      );
-      setCity(location[0].city);
-      // throw error;
-      setCountry(location[0].country);
-
-      const responseOfDaily = await fetch(
-        `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${API_KEY}&units=metric`
-      );
-      const json = await responseOfDaily.json();
-      setDays(json.daily);
-      setHours(json.hourly);
-      setCurrents(json.current);
-      console.log("it`s working");
-      console.log(currents.weather.length);
-    } catch (error) {
-      Alert.alert("Can't find you.", "So sad");
-    }
-  };
-
-  useEffect(() => {
-    getWeather();
-  }, []);
-
-  return (
-  
-  );
-}
-
-const styles = StyleSheet.create({
-  cityName: {
-    fontSize: 20,
-  },
-  countryName: {
-    fontSize: 20,
-  },
-  songOfToday: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  topContainer: {
-    flex: 3,
-    backgroundColor: "#46e2e2",
-    borderBottomStartRadius: 16,
-    borderBottomEndRadius: 16,
-  },
-  bottomContainer: {
-    flex: 1,
-    backgroundColor: "#4765ff",
-  },
-  clothes: {
-    width: 100,
-    height: 100,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "#4765ff",
-  },
-  infoOfTime: {
-    backgroundColor: "green",
-    marginLeft: 30,
-    alignItems: "center",
-  },
-  infoOfTime__time: {
-    color: "white",
-    marginLeft: 8,
-    marginRight: 10,
-    marginBottom: 4,
-  },
-  date: { flexDirection: "row" },
-
-  infoOfTime__temp: {
-    marginTop: 4,
-  },
-  todayBar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 3,
-    marginLeft: 20,
-    marginRight: 20,
-    marginBottom: 3,
-  },
-  localInfo: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 32,
-    marginBottom: 14,
-  },
-  tempInfo: {
-    flexDirection: "column",
-  },
-  weatherOfToday: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    marginBottom: 30,
-  },
-  twoTemp: {
-    flexDirection: "row",
-    marginBottom: 7,
-  },
-  temp__now: {
-    fontSize: 50,
-    fontWeight: "600",
-  },
-  temp__min: { marginTop: 35, marginLeft: 6, fontWeight: "400", fontSize: 20 },
-  temp__main: {
-    marginLeft: 7,
-  },
-  ClothesOfToday: {
-    backgroundColor: "#8a6dff",
-  },
-});
+]

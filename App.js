@@ -168,8 +168,9 @@ const clothesOptions = {
   part3: { description: "얇은 가디건, 긴팔, 면바지, 청바지" },
   part4: { description: "얇은 니트, 맨투맨, 가디건, 청바지, 면바지" },
   part5: { description: "자켓, 가디건, 청바지, 스타킹, 면바지" },
-  part6: { description: "코트, 가죽자켓, 히트텍, 레깅스" },
-  part7: { description: "패딩, 두꺼운 코트, 목도리, 기모제품" },
+  part6: { description: "자켓, 트렌치코트, 니트, 청바지, 스타킹" },
+  part7: { description: "코트, 가죽자켓, 히트텍, 레깅스" },
+  part8: { description: "패딩, 두꺼운 코트, 목도리, 기모제품" },
 };
 
 export default function App() {
@@ -210,6 +211,7 @@ export default function App() {
       setCurrents(json.current);
       console.log("it`s working");
       console.log(hours[1].weather[0].main);
+      console.log(days);
     } catch (error) {
       Alert.alert("Can't find you.", "So sad");
     }
@@ -221,100 +223,212 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topContainer}>
-        <View style={styles.localInfo}>
-          <Ionicons name="location-outline" size={24} color="black" />
-          <Text style={styles.cityName}>{city}, </Text>
-          <Text style={styles.countryName}>{country}</Text>
-        </View>
-
-        {hours.length === 0 ? (
-          <View style={{ ...styles.day, alignItems: "center" }}>
-            <ActivityIndicator
-              color="white"
-              style={{ marginTop: 10 }}
-              size="large"
-            />
+      <LinearGradient
+        // Background Linear Gradient
+        colors={weatherOptions[hours[1].weather[0].main].gradient}
+        style={styles.background}
+      >
+        {/* <StatusBar barStyle="auto" /> */}
+        <View style={styles.topContainer}>
+          <View style={styles.localInfo}>
+            <Ionicons name="location-outline" size={24} color="black" />
+            <Text style={styles.cityName}>{city}, </Text>
+            <Text style={styles.countryName}>{country}</Text>
           </View>
-        ) : (
-          <View style={styles.tempAndNameAndDcp}>
-            <View style={styles.weatherOfToday}>
-              <Fontisto
-                name={icons[hours[1].weather[0].main]}
-                size={80}
+
+          {hours.length === 0 ? (
+            <View style={{ ...styles.day, alignItems: "center" }}>
+              <ActivityIndicator
                 color="white"
+                style={{ marginTop: 10 }}
+                size="large"
               />
-              <View style={styles.tempInfo}>
-                <View style={styles.twoTemp}>
-                  <Text style={styles.temp__now}>
-                    {parseFloat(hours[1].feels_like).toFixed(1)} /
-                  </Text>
-                  <Text style={styles.temp__min}>
-                    {parseFloat(days[0].temp.min).toFixed(1)}℃
+            </View>
+          ) : (
+            <View style={styles.tempAndNameAndDcp}>
+              <View style={styles.weatherOfToday}>
+                <Fontisto
+                  name={icons[hours[1].weather[0].main]}
+                  size={80}
+                  color="white\"
+                />
+                <View style={styles.tempInfo}>
+                  <View style={styles.twoTemp}>
+                    <Text style={styles.temp__now}>
+                      {parseFloat(hours[1].feels_like).toFixed(1)} /
+                    </Text>
+                    <Text style={styles.temp__min}>
+                      {parseFloat(days[0].temp.min).toFixed(1)}℃
+                    </Text>
+                  </View>
+                  <Text style={styles.temp__main}>
+                    {weatherOptions[hours[1].weather[0].main].title}
                   </Text>
                 </View>
-                <Text style={styles.temp__main}>
-                  {weatherOptions[hours[1].weather[0].main].title}
+              </View>
+              {parseFloat(hours[1].feels_like).toFixed(1) >= 28 && (
+                <View style={styles.ClothesOfToday}>
+                  <Image
+                    style={styles.clothes}
+                    source={{
+                      uri: "https://lounge-b.com/web/product/big/202011/b4d571ffb72a87c8e66ac56ac994c346.jpg",
+                    }}
+                  />
+                  <Text style={styles.exampleOfClothes}>
+                    {clothesOptions.part1.description}
+                  </Text>
+                </View>
+              )}
+
+              {parseFloat(hours[1].feels_like).toFixed(1) >= 23 &&
+                parseFloat(hours[1].feels_like).toFixed(1) <= 27 && (
+                  <View style={styles.ClothesOfToday}>
+                    <Image
+                      style={styles.clothes}
+                      source={{
+                        uri: "https://lounge-b.com/web/product/big/202011/b4d571ffb72a87c8e66ac56ac994c346.jpg",
+                      }}
+                    />
+                    <Text style={styles.exampleOfClothes}>
+                      {clothesOptions.part2.description}
+                    </Text>
+                  </View>
+                )}
+
+              {parseFloat(hours[1].feels_like).toFixed(1) >= 20 &&
+                parseFloat(hours[1].feels_like).toFixed(1) <= 22 && (
+                  <View style={styles.ClothesOfToday}>
+                    <Image
+                      style={styles.clothes}
+                      source={{
+                        uri: "https://lounge-b.com/web/product/big/202011/b4d571ffb72a87c8e66ac56ac994c346.jpg",
+                      }}
+                    />
+                    <Text style={styles.exampleOfClothes}>
+                      {clothesOptions.part3.description}
+                    </Text>
+                  </View>
+                )}
+
+              {parseFloat(hours[1].feels_like).toFixed(1) >= 17 &&
+                parseFloat(hours[1].feels_like).toFixed(1) <= 19 && (
+                  <View style={styles.ClothesOfToday}>
+                    <Image
+                      style={styles.clothes}
+                      source={{
+                        uri: "https://lounge-b.com/web/product/big/202011/b4d571ffb72a87c8e66ac56ac994c346.jpg",
+                      }}
+                    />
+                    <Text style={styles.exampleOfClothes}>
+                      {clothesOptions.part4.description}
+                    </Text>
+                  </View>
+                )}
+
+              {parseFloat(hours[1].feels_like).toFixed(1) >= 12 &&
+                parseFloat(hours[1].feels_like).toFixed(1) <= 16 && (
+                  <View style={styles.ClothesOfToday}>
+                    <Image
+                      style={styles.clothes}
+                      source={require("./img/part7.png")}
+                    />
+
+                    <Text style={styles.exampleOfClothes}>
+                      {clothesOptions.part5.description}
+                    </Text>
+                  </View>
+                )}
+
+              {parseFloat(hours[1].feels_like).toFixed(1) >= 9 &&
+                parseFloat(hours[1].feels_like).toFixed(1) <= 11 && (
+                  <View style={styles.ClothesOfToday}>
+                    <Image
+                      style={styles.clothes}
+                      source={{
+                        uri: "https://lounge-b.com/web/product/big/202011/b4d571ffb72a87c8e66ac56ac994c346.jpg",
+                      }}
+                    />
+                    <Text style={styles.exampleOfClothes}>
+                      {clothesOptions.part6.description}
+                    </Text>
+                  </View>
+                )}
+
+              {parseFloat(hours[1].feels_like).toFixed(1) >= 5 &&
+                parseFloat(hours[1].feels_like).toFixed(1) <= 8 && (
+                  <View style={styles.ClothesOfToday}>
+                    <Image
+                      style={styles.clothes}
+                      source={{
+                        uri: "https://lounge-b.com/web/product/big/202011/b4d571ffb72a87c8e66ac56ac994c346.jpg",
+                      }}
+                    />
+                    <Text style={styles.exampleOfClothes}>
+                      {clothesOptions.part7.description}
+                    </Text>
+                  </View>
+                )}
+
+              {parseFloat(hours[1].feels_like).toFixed(1) <= 4 && (
+                <View style={styles.ClothesOfToday}>
+                  <Image source={require("./img/part7.png")} />
+                  <Text style={styles.exampleOfClothes}>
+                    {clothesOptions.part8.description}
+                  </Text>
+                </View>
+              )}
+
+              <View style={styles.songOfToday}>
+                <Text style={styles.madedText}>준비하면서 </Text>
+                <Text
+                  style={{ ...styles.madedText, color: "blue" }}
+                  onPress={() =>
+                    Linking.openURL(
+                      weatherOptions[days[0].weather[0].main].youtubeLink
+                    )
+                  }
+                >
+                  "{weatherOptions[days[0].weather[0].main].nameOfSong}"
                 </Text>
+                <Text style={styles.madedText}> 들으러 가기</Text>
               </View>
             </View>
-
-            <View style={styles.ClothesOfToday}>
-              <Image
-                style={styles.clothes}
-                source={{
-                  uri: "https://lounge-b.com/web/product/big/202011/b4d571ffb72a87c8e66ac56ac994c346.jpg",
-                }}
-              />
-              <Text style={styles.exampleOfClothes}>
-                {clothesOptions.part6.description}
-              </Text>
-            </View>
-            <View style={styles.songOfToday}>
-              <Text style={styles.madedText}>준비하면서 </Text>
-              <Text
-                style={{ ...styles.madedText, color: "blue" }}
-                onPress={() =>
-                  Linking.openURL(
-                    weatherOptions[days[0].weather[0].main].youtubeLink
-                  )
-                }
-              >
-                "{weatherOptions[days[0].weather[0].main].nameOfSong}"
-              </Text>
-              <Text style={styles.madedText}> 들으러 가기</Text>
-            </View>
-          </View>
-        )}
-      </View>
-      <View style={styles.bottomContainer}>
-        <View style={styles.todayBar}>
-          <Text style={{ fontSize: 25, fontWeight: "600" }}>Today</Text>
-          <AntDesign name="doubleright" size={24} color="black" />
+          )}
         </View>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={"false"}
-          pagingEnabled
-          contentStyles={styles.scrollView}
-        >
-          {hours.slice(1, 15).map((hour, index) => (
-            <View key={index} style={styles.infoOfTime}>
-              <Text style={styles.infoOfTime__time}>
-                {changeHours(giveMeHours(hour.dt * 1000 - date.getTime()))}
-              </Text>
-              <Fontisto
-                name={icons[hour.weather[0].main]}
-                size={30}
-                color="white"
-              />
-              <Text style={styles.infoOfTime__temp}>
-                {parseFloat(hour.temp).toFixed(1)}℃
-              </Text>
-            </View>
-          ))}
-        </ScrollView>
-      </View>
+        <View style={styles.bottomContainer}>
+          <View style={styles.todayBar}>
+            <Text style={{ fontSize: 25, fontWeight: "600" }}>Today</Text>
+            <AntDesign
+              style={styles.rigthright}
+              name="doubleright"
+              size={22}
+              color="black"
+            />
+          </View>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={"false"}
+            pagingEnabled
+            contentStyles={styles.scrollView}
+          >
+            {hours.slice(1, 15).map((hour, index) => (
+              <View key={index} style={styles.infoOfTime}>
+                <Text style={styles.infoOfTime__time}>
+                  {changeHours(giveMeHours(hour.dt * 1000 - date.getTime()))}
+                </Text>
+                <Fontisto
+                  name={icons[hour.weather[0].main]}
+                  size={30}
+                  color="white"
+                />
+                <Text style={styles.infoOfTime__temp}>
+                  {parseFloat(hour.temp).toFixed(1)}℃
+                </Text>
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+      </LinearGradient>
     </View>
   );
 }
@@ -334,26 +448,22 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flex: 4,
-    backgroundColor: "#46e2e2",
-    borderBottomStartRadius: 16,
-    borderBottomEndRadius: 16,
+    backgroundColor: "transparent",
   },
   bottomContainer: {
     flex: 1,
-    backgroundColor: "#4765ff",
-  },
-  clothes: {
-    width: 100,
-    height: 100,
+    backgroundColor: "rgba(56, 142, 255, 0.45)",
+    borderTopRightRadius: 15,
+    borderTopLeftRadius: 15,
   },
   container: {
     flex: 1,
-    backgroundColor: "#4765ff",
+    backgroundColor: "#00000000",
   },
   infoOfTime: {
-    backgroundColor: "green",
-    marginLeft: 30,
+    marginLeft: 17,
     alignItems: "center",
+    marginBottom: -10,
   },
   infoOfTime__time: {
     color: "white",
@@ -365,14 +475,15 @@ const styles = StyleSheet.create({
 
   infoOfTime__temp: {
     marginTop: 4,
+    color: "white",
   },
   todayBar: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 3,
+    marginTop: 8,
     marginLeft: 20,
     marginRight: 20,
-    marginBottom: 3,
+    marginBottom: 9,
   },
   localInfo: {
     flex: 1,
@@ -396,26 +507,43 @@ const styles = StyleSheet.create({
   temp__now: {
     fontSize: 50,
     fontWeight: "600",
+    color: "white",
   },
-  temp__min: { marginTop: 35, marginLeft: 6, fontWeight: "400", fontSize: 20 },
+  temp__min: {
+    marginTop: 35,
+    marginLeft: 6,
+    fontWeight: "400",
+    fontSize: 20,
+    color: "white",
+  },
   temp__main: {
     marginLeft: 7,
+    color: "white",
+    fontWeight: "900",
   },
   ClothesOfToday: {
     flex: 3,
-    backgroundColor: "#8a6dff",
+    backgroundColor: "green",
     flexDirection: "column",
     alignItems: "center",
-    borderBottomWidth: 2,
-    borderRadius: 5,
     borderColor: "white",
     marginRight: 17,
     marginLeft: 17,
+    borderRadius: 10,
+    shadowColor: "#000000",
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+    shadowOffset: {
+      width: 5,
+      height: 5,
+    },
   },
   exampleOfClothes: {
-    marginTop: 16,
+    marginTop: 120,
     marginBottom: 16,
     borderEndColor: "black",
+    fontSize: 20,
+    backgroundColor: "tomato",
   },
   tempAndNameAndDcp: {
     flex: 11,
@@ -423,5 +551,17 @@ const styles = StyleSheet.create({
   madedText: {
     fontWeight: "500",
     fontSize: 16,
+    color: "white",
+  },
+  clothes: {
+    width: 100,
+    height: 100,
+  },
+  background: {
+    flex: 1,
+  },
+  rigthright: {
+    marginTop: 3,
+    marginRight: -10,
   },
 });
