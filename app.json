@@ -2,7 +2,7 @@
   "expo": {
     "name": "ClothesForWeather",
     "slug": "ClothesForWeather",
-    "version": "1.0.0",
+    "owner": "jason_327",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,16 +17,19 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jusong23.ClothesForWeather"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.jusong23.ClothesForWeather"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": ""
   }
 }
