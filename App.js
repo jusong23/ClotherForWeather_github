@@ -12,12 +12,9 @@ import {
   TouchableOpacity,
   Button,
 } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
 import "react-native-gesture-handler";
 import Loading from "./Loading";
-import optionalPage from "./optionalPage";
 import * as Location from "expo-location";
 import {
   AntDesign,
@@ -573,7 +570,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   weatherOfToday: {
-    height: "20%",
+    height: "30%",
     marginTop: -40,
     flexDirection: "row",
     justifyContent: "space-evenly",
