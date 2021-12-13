@@ -5,6 +5,8 @@
     "owner": "jason_327",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "version": "1.0.0",
+
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -13,12 +15,11 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.jusong23.ClothesForWeather"
+      "bundleIdentifier": "com.jusong23.ClothesForWeather",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {

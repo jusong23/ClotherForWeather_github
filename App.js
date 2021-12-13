@@ -188,6 +188,9 @@ const clothesOptions = {
 };
 
 export default function App() {
+  useEffect(() => {
+    getWeather();
+  }, []);
   const [city, setCity] = useState("Loading...");
   const [days, setDays] = useState([]);
   const [currents, setCurrents] = useState([]);
@@ -226,12 +229,10 @@ export default function App() {
       setHours(json.hourly);
       setCurrents(json.current);
       console.log("it`s working");
-    } catch (error) {}
+    } catch (error) {
+      Alert.alert("Can't find you.", "So sad");
+    }
   };
-
-  useEffect(() => {
-    getWeather();
-  }, []);
 
   return (
     <View style={styles.container}>
